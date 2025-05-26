@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>+ApoioJá</title>
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIitBcG9pb0rDoSIsCiAgInNob3J0X25hbWUiOiAiQXBvaW9KYSIsCiAgImRlc2NyaXB0aW9uIjogIkFwbGljYXRpdm8gZGUgYXBvaW8gcGFyYSBwZXNzb2FzIGNvbSBhdXRpc21vIGVtIHN1cGVybWVyY2Fkb3MiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzI1NjNFQiIsCiAgInRoZW1lX2NvbG9yIjogIiMyNTYzRUIiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSGRwWkhSb1BTSnpNVElpSUdobGFXZG9kRDBpTlRFeUlpQjJhV1YzUW05NFBTSXdJREFnTlRFeUlEVXhNaUlnWm1sc2JEMGlJek0xTmpORkVpSStQR05wY21Oc1pTQmplRDBpTWpVMklpQmplVDBpTWpVMklpQnlQU0l5TWpRaUlHWnBiR3c5SW1admNpVTVNblVpTHo0OEwzTjJaejQ9IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    <meta name="theme-color" content="#2563EB">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiIgZmlsbD0iIzI1NjNFQiI+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyMjQiIGZpbGw9ImZvcSU5MnUiLz48L3N2Zz4=">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #F9FAFB;
+            color: #111827;
+            line-height: 1.5;
+        }
+        
+        .safe-area {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background-color: #2563EB;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .voice-button {
+            padding: 8px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .voice-button.active {
+            background-color: #DC2626;
+        }
+        
+        .voice-indicator {
+            background-color: #FEE2E2;
+            padding: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #DC2626;
+            font-weight: 500;
+            display: none;
+        }
+        
+        .voice-indicator.active {
+            display: flex;
+        }
+        
+        .main {
+            flex: 1;
+            padding: 16px;
+        }
+        
+        .action-button {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            background: white;
+            transition: transform 0.2s;
+        }
+        
+        .action-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .blue-button { background-color: #DBEAFE; }
+        .green-button { background-color: #D1FAE5; }
+        .purple-button { background-color: #E9D5FF; }
+        .gray-button { background-color: #F3F4F6; }
+        
+        .icon-container {
+            padding: 12px;
+            border-radius: 20px;
+            margin-right: 16px;
+            color: white;
+            font-size: 24px;
+        }
+        
+        .blue-icon { background-color: #3B82F6; }
+        .green-icon { background-color: #10B981; }
+        .purple-icon { background-color: #8B5CF6; }
+        .gray-icon { background-color: #6B7280; }
+        
+        .button-content {
+            flex: 1;
+        }
+        
+        .button-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        
+        .button-subtitle {
+            font-size: 14px;
+            color: #6B7280;
+        }
+        
+        .screen-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .label {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            margin-top: 8px;
+        }
+        
+        .select-container {
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        
+        .select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: white;
+            font-size: 16px;
+            color: #374151;
+            appearance: none;
+            cursor: pointer;
+        }
+        
+        .select:focus {
+            outline: 2px solid #3B82F6;
+            outline-offset: -2px;
+        }
+        
+        .input-container {
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .input {
+            font-size: 16px;
+            color: #374151;
+        }
+        
+        .input-row {
+            display: flex;
+            align-items: center;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .input-icon {
+            margin-right: 8px;
+            color: #6B7280;
+        }
+        
+        .text-area {
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            padding: 12px;
+            height: 100px;
+            width: 100%;
+            resize: vertical;
+            font-family: inherit;
+            margin-bottom: 16px;
+        }
+        
+        .primary-button {
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+        
+        .primary-button:hover {
+            opacity: 0.9;
+        }
+        
+        .blue-background { background-color: #3B82F6; }
+        .green-background { background-color: #10B981; }
+        .purple-background { background-color: #8B5CF6; }
+        .gray-background { background-color: #6B7280; }
+        
+        .back-button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 16px;
+            color: #3B82F6;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .profile-avatar {
+            background-color: #E5E7EB;
+            border-radius: 30px;
+            padding: 20px;
+            margin-right: 16px;
+            color: #6B7280;
+        }
+        
+        .profile-name {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .profile-email {
+            font-size: 14px;
+            color: #6B7280;
+        }
+        
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        
+        .tag {
+            padding: 6px 12px;
+            border-radius: 16px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .blue-tag {
+            background-color: #DBEAFE;
+            color: #1D4ED8;
+        }
+        
+        .green-tag {
+            background-color: #D1FAE5;
+            color: #047857;
+        }
+        
+        .preferences-container {
+            margin-bottom: 16px;
+        }
+        
+        .preference-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+        }
+        
+        .preference-text {
+            font-size: 16px;
+        }
+        
+        .switch {
+            width: 44px;
+            height: 24px;
+            border-radius: 12px;
+        }
+        
+        .switch-on { background-color: #3B82F6; }
+        .switch-off { background-color: #E5E7EB; }
+        
+        .favorite-market {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background-color: #F9FAFB;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .location-icon {
+            margin-right: 8px;
+            color: #9CA3AF;
+        }
+        
+        .market-text {
+            font-size: 16px;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+        
+        .modal-icon {
+            margin-bottom: 16px;
+            color: #10B981;
+            font-size: 48px;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .modal-message {
+            margin-bottom: 16px;
+            color: #6B7280;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Icons usando Unicode */
+        .icon-headset::before { content: '🎧'; }
+        .icon-chat::before { content: '💬'; }
+        .icon-calendar::before { content: '📅'; }
+        .icon-person::before { content: '👤'; }
+        .icon-chevron::before { content: '›'; }
+        .icon-home::before { content: '🏠'; }
+        .icon-time::before { content: '🕒'; }
+        .icon-location::before { content: '📍'; }
+        .icon-mic::before { content: '🎤'; }
+        .icon-check::before { content: '✅'; }
+        
+        @media (max-width: 480px) {
+            .main {
+                padding: 12px;
+            }
+            
+            .action-button {
+                padding: 12px;
+            }
+            
+            .button-title {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="safe-area">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="header-title">+ApoioJá</h1>
+            <button class="voice-button" onclick="toggleVoice()">
+                <span class="icon-mic"></span>
+            </button>
+        </div>
+        
+        <!-- Voice Indicator -->
+        <div class="voice-indicator" id="voiceIndicator">
+            <span class="icon-mic" style="margin-right: 4px;"></span>
+            <span>Controle por voz ativado - diga um comando</span>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main" id="mainContent">
+            <!-- Home Screen -->
+            <div id="homeScreen">
+                <button class="action-button blue-button" onclick="showScreen('headphones')">
+                    <div class="icon-container blue-icon">
+                        <span class="icon-headset"></span>
+                    </div>
+                    <div class="button-content">
+                        <div class="button-title">Reservar Abafador</div>
+                        <div class="button-subtitle">Reserve um abafador para sua visita</div>
+                    </div>
+                    <span class="icon-chevron"></span>
+                </button>
+                
+                <button class="action-button green-button" onclick="showScreen('immediateHelp')">
+                    <div class="icon-container green-icon">
+                        <span class="icon-chat"></span>
+                    </div>
+                    <div class="button-content">
+                        <div class="button-title">Solicitar Apoio Agora</div>
+                        <div class="button-subtitle">Peça ajuda imediata no mercado</div>
+                    </div>
+                    <span class="icon-chevron"></span>
+                </button>
+                
+                <button class="action-button purple-button" onclick="showScreen('scheduleHelp')">
+                    <div class="icon-container purple-icon">
+                        <span class="icon-calendar"></span>
+                    </div>
+                    <div class="button-content">
+                        <div class="button-title">Agendar Apoio</div>
+                        <div class="button-subtitle">Agende assistência para outro dia</div>
+                    </div>
+                    <span class="icon-chevron"></span>
+                </button>
+                
+                <button class="action-button gray-button" onclick="showScreen('profile')">
+                    <div class="icon-container gray-icon">
+                        <span class="icon-person"></span>
+                    </div>
+                    <div class="button-content">
+                        <div class="button-title">Meu Perfil</div>
+                        <div class="button-subtitle">Gerencie suas preferências</div>
+                    </div>
+                    <span class="icon-chevron"></span>
+                </button>
+            </div>
+            
+            <!-- Headphones Screen -->
+            <div id="headphonesScreen" class="hidden">
+                <h2 class="screen-title">Reservar Abafador</h2>
+                
+                <div class="form-container">
+                    <label class="label">Selecione o Supermercado</label>
+                    <div class="select-container">
+                        <select class="select" id="marketSelect1">
+                            <option value="">Selecione um supermercado</option>
+                            <option value="Mix Matheus">Mix Matheus</option>
+                            <option value="Carvalho">Carvalho</option>
+                            <option value="Mercadinho do Povo">Mercadinho do Povo</option>
+                        </select>
+                    </div>
+                    
+                    <label class="label">Data da Visita</label>
+                    <div class="input-row">
+                        <span class="icon-calendar input-icon"></span>
+                        <input type="date" class="input" style="border: none; flex: 1;" value="2025-05-20">
+                    </div>
+                    
+                    <label class="label">Horário Aproximado</label>
+                    <div class="input-row">
+                        <span class="icon-time input-icon"></span>
+                        <input type="time" class="input" style="border: none; flex: 1;" value="15:00">
+                    </div>
+                    
+                    <button class="primary-button blue-background" onclick="handleAction('reserveHeadphones')">
+                        Confirmar Reserva
+                    </button>
+                </div>
+                
+                <button class="back-button" onclick="showScreen('home')">
+                    <span class="icon-home" style="margin-right: 4px;"></span>
+                    <span>Voltar à Tela Inicial</span>
+                </button>
+            </div>
+            
+            <!-- Immediate Help Screen -->
+            <div id="immediateHelpScreen" class="hidden">
+                <h2 class="screen-title">Solicitar Apoio Agora</h2>
+                
+                <div class="form-container">
+                    <label class="label">Selecione o Supermercado</label>
+                    <div class="select-container">
+                        <select class="select" id="marketSelect2">
+                            <option value="">Selecione um supermercado</option>
+                            <option value="Mix Matheus">Mix Matheus</option>
+                            <option value="Carvalho">Carvalho</option>
+                            <option value="Mercadinho do Povo">Mercadinho do Povo</option>
+                        </select>
+                    </div>
+                    
+                    <label class="label">Onde você está?</label>
+                    <div class="select-container">
+                        <select class="select">
+                            <option>Entrada principal</option>
+                            <option>Seção de frutas e verduras</option>
+                            <option>Seção de carnes</option>
+                            <option>Seção de laticínios</option>
+                            <option>Seção de bebidas</option>
+                            <option>Caixas</option>
+                            <option>Outro local</option>
+                        </select>
+                    </div>
+                    
+                    <label class="label">Tipo de assistência</label>
+                    <div class="select-container">
+                        <select class="select">
+                            <option>Auxílio para encontrar produtos</option>
+                            <option>Ajuda com compras</option>
+                            <option>Orientação sobre produtos</option>
+                            <option>Apoio sensorial</option>
+                            <option>Outro tipo de ajuda</option>
+                        </select>
+                    </div>
+                    
+                    <label class="label">Descrição</label>
+                    <textarea class="text-area" placeholder="Descreva aqui o tipo de ajuda que você precisa..."></textarea>
+                    
+                    <button class="primary-button green-background" onclick="handleAction('requestHelp')">
+                        Solicitar Ajuda Agora
+                    </button>
+                </div>
+                
+                <button class="back-button" onclick="showScreen('home')">
+                    <span class="icon-home" style="margin-right: 4px;"></span>
+                    <span>Voltar à Tela Inicial</span>
+                </button>
+            </div>
+            
+            <!-- Schedule Help Screen -->
+            <div id="scheduleHelpScreen" class="hidden">
+                <h2 class="screen-title">Agendar Apoio</h2>
+                
+                <div class="form-container">
+                    <label class="label">Selecione o Supermercado</label>
+                    <div class="select-container">
+                        <select class="select" id="marketSelect3">
+                            <option value="">Selecione um supermercado</option>
+                            <option value="Mix Matheus">Mix Matheus</option>
+                            <option value="Carvalho">Carvalho</option>
+                            <option value="Mercadinho do Povo">Mercadinho do Povo</option>
+                        </select>
+                    </div>
+                    
+                    <label class="label">Data da Visita</label>
+                    <div class="input-row">
+                        <span class="icon-calendar input-icon"></span>
+                        <input type="date" class="input" style="border: none; flex: 1;" value="2025-05-20">
+                    </div>
+                    
+                    <label class="label">Horário</label>
+                    <div class="input-row">
+                        <span class="icon-time input-icon"></span>
+                        <input type="time" class="input" style="border: none; flex: 1;" value="15:00">
+                    </div>
+                    
+                    <label class="label">Tipo de assistência</label>
+                    <div class="select-container">
+                        <select class="select">
+                            <option>Auxílio para encontrar produtos</option>
+                            <option>Ajuda com compras</option>
+                            <option>Orientação sobre produtos</option>
+                            <option>Apoio sensorial</option>
+                            <option>Outro tipo de ajuda</option>
+                        </select>
+                    </div>
+                    
+                    <label class="label">Observações adicionais</label>
+                    <textarea class="text-area" style="height: 80px;" placeholder="Observações adicionais..."></textarea>
+                    
+                    <button class="primary-button purple-background" onclick="handleAction('scheduleHelp')">
+                        Confirmar Agendamento
+                    </button>
+                </div>
+                
+                <button class="back-button" onclick="showScreen('home')">
+                    <span class="icon-home" style="margin-right: 4px;"></span>
+                    <span>Voltar à Tela Inicial</span>
+                </button>
+            </div>
+            
+            <!-- Profile Screen -->
+            <div id="profileScreen" class="hidden">
+                <h2 class="screen-title">Meu Perfil</h2>
+                
+                <div class="form-container">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <span class="icon-person"></span>
+                        </div>
+                        <div>
+                            <div class="profile-name">Maria Silva</div>
+                            <div class="profile-email">maria.silva@email.com</div>
+                        </div>
+                    </div>
+                    
+                    <label class="label">Minhas Necessidades</label>
+                    <div class="tags-container">
+                        <div class="tag blue-tag">Autismo</div>
+                        <div class="tag green-tag">Sensibilidade auditiva</div>
+                    </div>
+                    
+                    <label class="label">Preferências de Acessibilidade</label>
+                    <div class="preferences-container">
+                        <div class="preference-item">
+                            <span class="preference-text">Alertas sonoros</span>
+                            <div class="switch switch-off"></div>
+                        </div>
+                        <div class="preference-item">
+                            <span class="preference-text">Alto contraste</span>
+                            <div class="switch switch-on"></div>
+                        </div>
+                        <div class="preference-item">
+                            <span class="preference-text">Fonte ampliada</span>
+                            <div class="switch switch-on"></div>
+                        </div>
+                    </div>
+                    
+                    <label class="label">Supermercado Favorito</label>
+                    <div class="favorite-market">
+                        <span class="icon-location location-icon"></span>
+                        <span class="market-text" id="favoriteMarketText">Mix Matheus</span>
+                    </div>
+                    
+                    <button class="primary-button gray-background">
+                        Salvar Alterações
+                    </button>
+                </div>
+                
+                <button class="back-button" onclick="showScreen('home')">
+                    <span class="icon-home" style="margin-right: 4px;"></span>
+                    <span>Voltar à Tela Inicial</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Confirmation Modal -->
+        <div class="modal-overlay hidden" id="confirmationModal">
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <span class="icon-check"></span>
+                </div>
+                <h3 class="modal-title">Sucesso!</h3>
+                <p class="modal-message" id="modalMessage"></p>
+                <button class="primary-button blue-background" onclick="closeConfirmation()">
+                    Entendi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let voiceActive = false;
+        let currentScreen = 'home';
+
+        function showScreen(screenName) {
+            // Hide all screens
+            const screens = ['homeScreen', 'headphonesScreen', 'immediateHelpScreen', 'scheduleHelpScreen', 'profileScreen'];
+            screens.forEach(screen => {
+                document.getElementById(screen).classList.add('hidden');
+            });
+            
+            // Show selected screen
+            document.getElementById(screenName + 'Screen').classList.remove('hidden');
+            currentScreen = screenName;
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function toggleVoice() {
+            voiceActive = !voiceActive;
+            const button = document.querySelector('.voice-button');
+            const indicator = document.getElementById('voiceIndicator');
+            
+            if (voiceActive) {
+                button.classList.add('active');
+                indicator.classList.add('active');
+            } else {
+                button.classList.remove('active');
+                indicator.classList.remove('active');
+            }
+        }
+
+        function handleAction(action) {
+            let message = '';
+            
+            switch(action) {
+                case 'reserveHeadphones':
+                    const market1 = document.getElementById('marketSelect1').value;
+                    if (!market1) {
+                        alert('Por favor, selecione um supermercado.');
+                        return;
+                    }
+                    message = Abafador reservado com sucesso no ${market1}! Retire na entrada do supermercado.;
+                    break;
+                case 'requestHelp':
+                    const market2 = document.getElementById('marketSelect2').value;
+                    if (!market2) {
+                        alert('Por favor, selecione um supermercado.');
+                        return;
+                    }
+                    message = Pedido de apoio enviado para o ${market2}! Um funcionário está a caminho.;
+                    break;
+                case 'scheduleHelp':
+                    const market3 = document.getElementById('marketSelect3').value;
+                    if (!market3) {
+                        alert('Por favor, selecione um supermercado.');
+                        return;
+                    }
+                    message = Agendamento confirmado no ${market3} para amanhã às 15:00.;
+                    break;
+            }
+            
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('confirmationModal').classList.remove('hidden');
+        }
+
+        function closeConfirmation() {
+            document.getElementById('confirmationModal').classList.add('hidden');
+            showScreen('home');
+        }
+
+        // Service Worker Registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                const swCode = `
+                    const CACHE_NAME = 'apoioja-v1';
+                    const urlsToCache = ['/'];
+                    
+                    self.addEventListener('install', function(event) {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(function(cache) {
+                                    return cache.addAll(urlsToCache);
+                                })
+                        );
+                    });
+                    
+                    self.addEventListener('fetch', function(event) {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(function(response) {
+                                    if (response) {
+                                        return response;
+                                    }
+                                    return fetch(event.request);
+                                })
+                        );
+                    });
+                `;
+                
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                
+                navigator.serviceWorker.register(swUrl)
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // Install prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show install button or banner
+            const installBanner = document.createElement('div');
+            installBanner.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                background: #2563EB;
+                color: white;
+                padding: 12px 16px;
+                border-radius: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                z-index: 1001;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            installBanner.innerHTML = `
+                <span>Instalar +ApoioJá no seu dispositivo</span>
+                <button id="installBtn" style="background: white; color: #2563EB; border: none; padding: 8px 12px; border-radius: 4px; font-weight: 500; cursor: pointer;">Instalar</button>
+            `;
+            document.body.appendChild(installBanner);
+            
+            document.getElementById('installBtn').addEventListener('click', () => {
+                installBanner.remove();
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+            
+            // Auto-hide banner after 10 seconds
+            setTimeout(() => {
+                if (document.body.contains(installBanner)) {
+                    installBanner.remove();
+                }
+            }, 10000);
+        });
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            showScreen('home');
+        });
+    </script>
+</body>
